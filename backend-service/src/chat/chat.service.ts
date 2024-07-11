@@ -8,16 +8,16 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Constant } from '../constants/constant';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway(Constant.SOCKET_PORT, { cors: true })
 export class ChatService {
   @WebSocketServer()
   server: Server;
   
   @SubscribeMessage(Constant.SOCHIP_CHAT)
   handleMessage(
-    @MessageBody() message: { sender: string, message: string },
+    @MessageBody() message: any,
     @ConnectedSocket() socket: Socket,
-  ) {
-    socket.emit(Constant.SOCHIP_CHAT, message);
+  ): void {
+    this.server.emit(Constant.SOCHIP_CHAT, message);
   }
 }
